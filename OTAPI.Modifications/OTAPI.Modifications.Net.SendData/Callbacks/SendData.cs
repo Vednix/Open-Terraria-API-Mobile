@@ -7,7 +7,7 @@
             ref int msgType,
             ref int remoteClient,
             ref int ignoreClient,
-            ref global::Terraria.Localization.NetworkText text,
+            ref string text,
             ref int number,
             ref float number2,
             ref float number3,

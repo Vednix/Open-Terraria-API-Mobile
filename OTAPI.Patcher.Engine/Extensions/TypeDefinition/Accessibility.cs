@@ -30,36 +30,10 @@ namespace OTAPI.Patcher.Engine.Extensions
 		/// <summary>
 		/// Ensures all members of the type are publicly accessible
 		/// </summary>
-		/// <param name="type">The type to be made accessible</param>
-		public static void MakePublic(this TypeDefinition type)
+		/// <param name="nested">To make all nested classes public as well.</param>
+		public static void MakePublic(this TypeDefinition type, bool nested = false)
 		{
-			var state = type.IsPublic;
-			if (type.IsNestedFamily)
-			{
-				type.IsNestedFamily = false;
-				type.IsNestedPublic = true;
-				state = false;
-			}
-			if (type.IsNestedFamilyAndAssembly)
-			{
-				type.IsNestedFamilyAndAssembly = false;
-				type.IsNestedPublic = true;
-				state = false;
-			}
-			if (type.IsNestedFamilyOrAssembly)
-			{
-				type.IsNestedFamilyOrAssembly = false;
-				type.IsNestedPublic = true;
-				state = false;
-			}
-			if (type.IsNestedPrivate)
-			{
-				type.IsNestedPrivate = false;
-				type.IsNestedPublic = true;
-				state = false;
-			}
-
-			type.IsPublic = state;
+			if (!nested) type.IsPublic = true;
 
 			foreach (var itm in type.Methods)
 			{
@@ -107,7 +81,7 @@ namespace OTAPI.Patcher.Engine.Extensions
 			}
 
 			foreach (var nt in type.NestedTypes)
-				nt.MakePublic();
+				nt.MakePublic(true);
 		}
 	}
 }

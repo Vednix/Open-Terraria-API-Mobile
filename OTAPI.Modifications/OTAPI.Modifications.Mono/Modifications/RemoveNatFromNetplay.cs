@@ -1,4 +1,5 @@
-﻿using Mono.Cecil;
+﻿using System;
+using Mono.Cecil;
 using Mono.Cecil.Cil;
 using OTAPI.Patcher.Engine.Extensions;
 using OTAPI.Patcher.Engine.Modification;
@@ -11,7 +12,7 @@ namespace OTAPI.Modifications.Mono.Modifications
 	{
 		public override IEnumerable<string> AssemblyTargets => new[]
 		{
-			"TerrariaServer, Version=1.3.5.3, Culture=neutral, PublicKeyToken=null"
+			"TerrariaServer, Version=1.3.0.7, Culture=neutral, PublicKeyToken=null"
 		};
 		public override string Description => "Removing NAT from Netplay";
 
@@ -29,6 +30,23 @@ namespace OTAPI.Modifications.Mono.Modifications
 				method.Body.Variables.Clear();
 				method.Body.ExceptionHandlers.Clear();
 			}
+
+			var cctorInstructions = netplay.StaticConstructor().Body.Instructions;
+			var start = cctorInstructions.IndexOf(cctorInstructions.FirstOrDefault(
+				i => i.OpCode == OpCodes.Ldstr
+				     && i.Operand.ToString() == "AE1E00AA-3FD5-403C-8A27-2BBDC30CD0E1"));
+			
+			var count = cctorInstructions.IndexOf(cctorInstructions.FirstOrDefault(
+				i => i.OpCode == OpCodes.Stsfld
+				     && i.Operand.ToString().Contains("mappings"))) - start;
+
+			var remove = cctorInstructions.ToList().GetRange(start, count + 1);
+
+			foreach (var i in remove)
+			{
+				cctorInstructions.Remove(i);
+			}
+             			
 
 			netplay.Fields.Remove(netplay.Field("mappings"));
 			netplay.Fields.Remove(netplay.Field("upnpnat"));

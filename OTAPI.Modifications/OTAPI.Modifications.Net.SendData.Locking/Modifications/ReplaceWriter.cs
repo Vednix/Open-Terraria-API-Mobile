@@ -32,10 +32,9 @@ namespace OTAPI.Patcher.Engine.Modifications.Hooks.Net
 			VariableDefinition mswriter;
 			OpCode binaryWriter;
 
-			// TODO: Port to 1.3.0.7
-//			InjectNewWriter(sendData, processor, out mswriter, out binaryWriter);
-//			SendWriterPacket(sendData, processor, mswriter, binaryWriter);
-//			NurfWriteBuffer();
+			InjectNewWriter(sendData, processor, out mswriter, out binaryWriter);
+			SendWriterPacket(sendData, processor, mswriter, binaryWriter);
+			NurfWriteBuffer();
 		}
 
 		void InjectNewWriter(MethodDefinition sendData, ILProcessor processor, out VariableDefinition mswriter, out OpCode binaryWriter)
@@ -80,15 +79,15 @@ namespace OTAPI.Patcher.Engine.Modifications.Hooks.Net
 				.GetConstructors()
 				.Single(x => x.GetParameters().Count() == 1)
 			);
-			if (buffer.Next.OpCode != OpCodes.Ldloc_3)
+			if (buffer.Next.OpCode != OpCodes.Ldloc_1)
 			{
-				throw new NotSupportedException("Expected Ldloc_3");
+				throw new NotSupportedException("Expected Ldloc_1");
 			}
 
 			/*var*/
 			binaryWriter = buffer.Next.OpCode;
 			processor.InsertAfter(buffer,
-				new { OpCodes.Stloc_3 }
+				new { OpCodes.Stloc_1 }
 			);
 		}
 
@@ -137,7 +136,7 @@ namespace OTAPI.Patcher.Engine.Modifications.Hooks.Net
 					processor.Replace(writeBuffer.Previous.Previous.Previous, Instruction.Create(OpCodes.Nop));
 					processor.Replace(writeBuffer.Previous.Previous, Instruction.Create(OpCodes.Nop));
 					processor.Replace(writeBuffer.Previous, Instruction.Create(OpCodes.Nop));
-					processor.Replace(writeBuffer, Instruction.Create(OpCodes.Ldloc_3));
+					processor.Replace(writeBuffer, Instruction.Create(OpCodes.Ldloc_1));
 
 					var call = sendData.Body.Instructions.
 						Single(i => i.OpCode == OpCodes.Call && (i.Operand as MethodReference).Name == "CompressTileBlock");

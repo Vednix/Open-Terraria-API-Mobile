@@ -12,7 +12,7 @@
 				int msgType,
 				int remoteClient,
 				int ignoreClient,
-                Terraria.Localization.NetworkText text,
+                string text,
 				int number,
 				float number2,
 				float number3,

@@ -16,7 +16,7 @@ namespace OTAPI.Patcher.Engine.Modifications.Hooks.Net
         {
             int tmpI = 0;
             float tmpF = 0;
-            Terraria.Localization.NetworkText tmpS = null;
+            string tmpS = null;
 
             var vanilla = this.Method(() => Terraria.NetMessage.SendData(0, -1, -1, "", 0, 0, 0, 0, 0, 0, 0));
             var callback = this.Method(() => OTAPI.Callbacks.Terraria.NetMessage.SendData(
@@ -34,6 +34,8 @@ namespace OTAPI.Patcher.Engine.Modifications.Hooks.Net
                 noEndHandling: false,
                 allowCallbackInstance: false
             );
+            
+            
         }
     }
 

@@ -49,6 +49,7 @@
     <Compile Include="Callbacks\SendBytes.cs" />
     <Compile Include="Hooks\SendBytes.cs" />
     <Compile Include="Modifications\SendBytes.cs" />
+    <Compile Include="Modifications\SendDataNetworkText.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OTAPI.Patcher.Engine\OTAPI.Patcher.Engine.csproj">

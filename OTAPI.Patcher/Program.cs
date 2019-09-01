@@ -35,7 +35,7 @@ namespace OTAPI.Patcher
 				args = new[]
 				{
 					@"-pre-merge-in=../../../wrap/TerrariaServer/TerrariaServer.exe",
-					@"-pre-merge-in=../../../wrap/TerrariaServer/ReLogic.dll",
+//					@"-pre-merge-in=../../../wrap/TerrariaServer/ReLogic.dll",
 					@"-pre-merge-out=../../../TerrariaServer.dll",
 					@"-in=../../../TerrariaServer.dll",
 #if DEBUG
